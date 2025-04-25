@@ -10,9 +10,11 @@ import (
 type BuildpacksCommand struct {
 	BaseCommand
 
+	// todo: add lifecycle to usage
 	usage           interface{} `usage:"CF_NAME buildpacks [--labels SELECTOR]\n\nEXAMPLES:\n   CF_NAME buildpacks\n   CF_NAME buildpacks --labels 'environment in (production,staging),tier in (backend)'\n   CF_NAME buildpacks --labels 'env=dev,!chargeback-code,tier in (backend,worker)'"`
 	relatedCommands interface{} `related_commands:"create-buildpack, delete-buildpack, rename-buildpack, update-buildpack"`
 	Labels          string      `long:"labels" description:"Selector to filter buildpacks by labels"`
+	Lifecycle       string      `long:"lifecycle" description:"return buildpacks with a particular lifecycle ('buildpack' or 'cnb'), if empty will return buildpacks using default_lifecycle"`
 }
 
 func (cmd BuildpacksCommand) Execute(args []string) error {
@@ -31,7 +33,7 @@ func (cmd BuildpacksCommand) Execute(args []string) error {
 	})
 	cmd.UI.DisplayNewline()
 
-	buildpacks, warnings, err := cmd.Actor.GetBuildpacks(cmd.Labels)
+	buildpacks, warnings, err := cmd.Actor.GetBuildpacks(cmd.Labels, cmd.Lifecycle)
 	cmd.UI.DisplayWarnings(warnings)
 	if err != nil {
 		return err

@@ -198,10 +198,11 @@ var _ = Describe("Buildpack", func() {
 			warnings      Warnings
 			executeErr    error
 			labelSelector string
+			lifecycle     string
 		)
 
 		JustBeforeEach(func() {
-			buildpacks, warnings, executeErr = actor.GetBuildpacks(labelSelector)
+			buildpacks, warnings, executeErr = actor.GetBuildpacks(labelSelector, lifecycle)
 		})
 
 		It("calls CloudControllerClient.GetBuildpacks()", func() {
